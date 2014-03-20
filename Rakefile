@@ -16,8 +16,8 @@ desc "Update TinyMCE to version #{TinyMCE::Rails::TINYMCE_VERSION}"
 task :update => [ :fetch, :extract, :process ]
 
 task :fetch do
-  download("https://github.com/downloads/tinymce/tinymce/tinymce_#{TinyMCE::Rails::TINYMCE_VERSION}.zip", "tinymce.zip")
-  download("https://github.com/downloads/tinymce/tinymce/tinymce_#{TinyMCE::Rails::TINYMCE_VERSION}_jquery.zip", "tinymce.jquery.zip")
+  download("http://download.moxiecode.com/tinymce/tinymce_#{TinyMCE::Rails::TINYMCE_VERSION}.zip", "tinymce.zip")
+  download("http://download.moxiecode.com/tinymce/tinymce_#{TinyMCE::Rails::TINYMCE_VERSION}_jquery.zip", "tinymce.jquery.zip")
 end
 
 task :extract do
@@ -49,3 +49,8 @@ task :process do
     end
   end
 end
+
+
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
+task :default => :spec

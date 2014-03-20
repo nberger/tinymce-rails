@@ -1,3 +1,5 @@
+require 'active_support/core_ext/hash/keys'
+
 module TinyMCE::Rails
   module Helper
     # Initializes TinyMCE on the current page based on the global configuration.
@@ -19,7 +21,14 @@ module TinyMCE::Rails
     
     # Returns the JavaScript code required to initialize TinyMCE.
     def tinymce_javascript(config=:default, options={})
+      "tinyMCE.init(#{tinymce_configuration(config, options).to_javascript});".html_safe
+    end
+    
+    # Returns the TinyMCE configuration object.
+    # It should be converted to JavaScript (via #to_javascript) for use within JavaScript.
+    def tinymce_configuration(config=:default, options={})
       options, config = config, :default if config.is_a?(Hash)
+      options.stringify_keys!
       
       base_configuration = TinyMCE::Rails.configuration
       
@@ -27,9 +36,7 @@ module TinyMCE::Rails
         base_configuration = base_configuration.fetch(config)
       end
       
-      configuration = base_configuration.merge(options)
-      
-      "tinyMCE.init(#{configuration.options_for_tinymce.to_json});".html_safe
+      base_configuration.merge(options)
     end
     
     # Includes TinyMCE javascript assets via a script tag.
